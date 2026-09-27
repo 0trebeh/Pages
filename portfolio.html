@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="meta.pfTitle">Portfolio — OtreDev</title>
+  <meta name="description" content="Projects by OtreDev: websites, web apps, tools and games.">
+  <meta name="theme-color" content="#0a0b10">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b7bff'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="brand" aria-label="OtreDev">
+        <span class="brand__mark" aria-hidden="true">O</span>
+        <span class="brand__name">Otre<span>Dev</span></span>
+      </a>
+      <nav class="nav__menu" id="navMenu" aria-label="Main">
+        <a href="index.html#servicios" class="nav__link" data-i18n="nav.services">Services</a>
+        <a href="index.html#proceso" class="nav__link" data-i18n="nav.process">Process</a>
+        <a href="portfolio.html" class="nav__link is-active" data-i18n="nav.projects">Projects</a>
+        <a href="index.html#fundador" class="nav__link" data-i18n="nav.about">About</a>
+        <a href="index.html#contacto" class="btn btn--primary btn--sm nav__cta" data-i18n="nav.cta">Let's talk</a>
+      </nav>
+      <div class="nav__right">
+        <div class="lang" role="group" aria-label="Language / Idioma">
+          <button type="button" class="lang__btn is-active" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" class="lang__btn" data-lang="es" aria-pressed="false">ES</button>
+        </div>
+        <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="container">
+        <a href="index.html" class="back-link">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+          <span data-i18n="pf.back">Back to home</span>
+        </a>
+        <span class="kicker" data-i18n="pf.kicker">Portfolio</span>
+        <h1 class="page-hero__title" data-i18n-html="pf.title">Projects that turn ideas into <span class="grad">results</span></h1>
+        <p class="section__lead" data-i18n="pf.lead">A selection of websites, apps, tools and games I've designed and developed — for clients and as personal projects.</p>
+
+        <div class="filters" role="group" aria-label="Filter">
+          <button class="filter is-active" data-filter="all" aria-pressed="true"><span data-i18n="filter.all">All</span> <em class="filter__n" data-count="all"></em></button>
+          <button class="filter" data-filter="client" aria-pressed="false"><span data-i18n="filter.client">Client websites</span> <em class="filter__n" data-count="client"></em></button>
+          <button class="filter" data-filter="app" aria-pressed="false"><span data-i18n="filter.app">Web apps &amp; tools</span> <em class="filter__n" data-count="app"></em></button>
+          <button class="filter" data-filter="other" aria-pressed="false"><span data-i18n="filter.other">Games &amp; more</span> <em class="filter__n" data-count="other"></em></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight">
+      <div class="container">
+        <div class="projects projects--grid" id="projectsGrid">
+          <!-- Se genera desde script.js (PROJECTS) -->
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-band reveal">
+          <div>
+            <h2 data-i18n="pf.ctaTitle">Want to see your project here?</h2>
+            <p data-i18n="pf.ctaText">Tell us your idea and we'll get back to you within 24 hours with next steps.</p>
+          </div>
+          <a href="index.html#contacto" class="btn btn--light">
+            <span data-i18n="pf.ctaBtn">Start a project</span>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__bottom">
+      <p>© <span id="year">2026</span> OtreDev. <span data-i18n="footer.rights">All rights reserved.</span></p>
+      <p><a href="index.html" data-i18n="footer.home">Home</a> · <a href="index.html#contacto" data-i18n="footer.contact">Contact</a></p>
+    </div>
+  </footer>
+
+  <!-- Modal de proyecto -->
+  <div class="modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel">
+      <button class="modal__close" data-close data-i18n-aria="modal.close" aria-label="Close">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
