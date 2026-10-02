@@ -901,3 +901,5 @@ details p { padding: 0 26px 24px; color: var(--muted); max-width: 720px; }
 }
 .mock__book .m-mini { width: 80%; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .mock__book .m-mini i { aspect-ratio: 1; border: 1.5px solid #2b2b3a; background: repeating-linear-gradient(0deg, transparent 0 32%, rgba(0,0,0,.35) 32% 34%), repeating-linear-gradient(90deg, transparent 0 32%, rgba(0,0,0,.35) 32% 34%), #fff; }
+.mock { isolation: isolate; }
+.project__thumb > img, .modal__thumb > img { z-index: 1; }

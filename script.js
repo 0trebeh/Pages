@@ -28,6 +28,82 @@ const CONFIG = {
    --------------------------------------------------------- */
 const PROJECTS = [
   {
+    id: "otrelink",
+    title: "Otrelink",
+    kind: "personal",
+    category: "app",
+    image: "img/projects/otrelink.jpg",
+    layout: "links",
+    colors: ["#9333ea", "#ec4899"],
+    featured: true,
+    type: { en: "SaaS · Full‑stack", es: "SaaS · Full‑stack" },
+    summary: {
+      en: "Modular, self‑hosted Linktree alternative: a live‑preview editor, 14 block types, 12 themes and built‑in analytics.",
+      es: "Alternativa a Linktree modular y autoalojada: editor con vista previa en vivo, 14 tipos de bloque, 12 temas y analíticas.",
+    },
+    challenge: {
+      en: "Creators and businesses need one page for everything they share, with full control over the design and real insight into what people click — without being locked into a closed platform.",
+      es: "Creadores y negocios necesitan una sola página para todo lo que comparten, con control total del diseño y datos reales de lo que la gente toca, sin quedar atados a una plataforma cerrada.",
+    },
+    solution: {
+      en: "A monorepo with a shared rendering core, so the editor preview is exactly what visitors see. Next.js powers the API and an installable PWA dashboard (drag‑and‑drop blocks, scheduling, undo/redo, multiple pages); the public page is lightweight vanilla JS. Includes 7 wallpaper types, 8 button styles, 21 fonts, 39 social networks, SEO, QR codes, JSON import/export and analytics with clicks, CTR, referrers and devices. Every block, theme or font is a plug‑in module.",
+      es: "Un monorepo con un núcleo de renderizado compartido, así lo que ves en el editor es exactamente lo que ven los visitantes. Next.js impulsa la API y un dashboard instalable como PWA (bloques que se arrastran, programación, deshacer/rehacer, varias páginas); la página pública es JavaScript vanilla ligero. Incluye 7 tipos de fondo, 8 estilos de botón, 21 fuentes, 39 redes sociales, SEO, códigos QR, importar/exportar en JSON y analíticas con clics, CTR, referrers y dispositivos. Cada bloque, tema o fuente es un módulo que se agrega o quita.",
+    },
+    technologies: ["Next.js", "React", "Vanilla JS", "Vite", "MongoDB", "Tailwind CSS", "PWA", "Render"],
+    url: "https://otrelink.onrender.com",
+    repo: "https://github.com/0trebeh/otrelink",
+  },
+  {
+    id: "atomic-url",
+    title: "Atomic URL",
+    kind: "personal",
+    category: "app",
+    layout: "shortener",
+    colors: ["#8b7bff", "#22d3ee"],
+    featured: true,
+    type: { en: "Web app · Link shortener", es: "App web · Acortador de enlaces" },
+    summary: {
+      en: "Serverless link shortener: short URLs with zero backend and zero cost.",
+      es: "Acortador de enlaces sin servidor: URLs cortas sin backend y sin costo.",
+    },
+    challenge: {
+      en: "Share short links without paying for a server or depending on a third‑party service.",
+      es: "Compartir enlaces cortos sin pagar un servidor ni depender de un servicio de terceros.",
+    },
+    solution: {
+      en: "Short keys are stored in Firebase Realtime Database; a tiny page hosted on GitHub Pages resolves them and redirects instantly.",
+      es: "Las claves cortas se guardan en Firebase Realtime Database; una página mínima en GitHub Pages las resuelve y redirige al instante.",
+    },
+    technologies: ["JavaScript", "Firebase", "GitHub Pages"],
+    url: "https://atomic-url.github.io/x/",
+    repo: "https://github.com/atomic-url/x",
+  },
+  {
+    id: "blackboard",
+    title: "Blackboard",
+    kind: "personal",
+    category: "other",
+    image: "https://images.steamusercontent.com/ugc/17038353526919109330/874125497B4A873FBF799E2BF39AE19CFD6F376F/",
+    layout: "board",
+    colors: ["#34d399", "#fbbf24"],
+    featured: true,
+    type: { en: "Wallpaper Engine · Steam", es: "Wallpaper Engine · Steam" },
+    summary: {
+      en: "Interactive blackboard wallpaper for Wallpaper Engine, published on Steam.",
+      es: "Fondo de pantalla interactivo tipo pizarra para Wallpaper Engine, publicado en Steam.",
+    },
+    challenge: {
+      en: "Turn the desktop into a useful, living space instead of a static image.",
+      es: "Convertir el escritorio en un espacio útil y vivo en lugar de una imagen estática.",
+    },
+    solution: {
+      en: "A web‑based wallpaper to write, draw in color and add images right on the desktop, with tools to select and delete elements. Published on the Steam Workshop.",
+      es: "Un fondo web para escribir, dibujar a color y agregar imágenes directamente en el escritorio, con herramientas para seleccionar y borrar elementos. Publicado en Steam Workshop.",
+    },
+    technologies: ["HTML5 Canvas", "JavaScript", "Wallpaper Engine"],
+    url: "https://steamcommunity.com/sharedfiles/filedetails/?id=3552720352",
+  },
+  {
     id: "forex-chart",
     title: "Forex Chart",
     kind: "personal",
@@ -110,7 +186,7 @@ const PROJECTS = [
     image: "img/projects/dozen.jpg",
     layout: "site",
     colors: ["#22c55e", "#8b7bff"],
-    featured: true,
+    featured: false,
     type: { en: "Website · Finance", es: "Sitio web · Finanzas" },
     summary: {
       en: "Bilingual website for a credit‑repair and financial intelligence firm.",
@@ -135,7 +211,7 @@ const PROJECTS = [
     category: "app",
     layout: "sudoku",
     colors: ["#fbbf24", "#8b7bff"],
-    featured: true,
+    featured: false,
     type: { en: "Web app · Publishing", es: "App web · Publicación" },
     summary: {
       en: "Puzzle Book Studio: a web editor to create, lay out and export sudoku books ready for Amazon KDP.",
@@ -200,56 +276,6 @@ const PROJECTS = [
     repo: "https://github.com/0trebeh/FoodTruck_Demo",
   },
   {
-    id: "atomic-url",
-    title: "Atomic URL",
-    kind: "personal",
-    category: "app",
-    layout: "shortener",
-    colors: ["#8b7bff", "#22d3ee"],
-    featured: false,
-    type: { en: "Web app · Link shortener", es: "App web · Acortador de enlaces" },
-    summary: {
-      en: "Serverless link shortener: short URLs with zero backend and zero cost.",
-      es: "Acortador de enlaces sin servidor: URLs cortas sin backend y sin costo.",
-    },
-    challenge: {
-      en: "Share short links without paying for a server or depending on a third‑party service.",
-      es: "Compartir enlaces cortos sin pagar un servidor ni depender de un servicio de terceros.",
-    },
-    solution: {
-      en: "Short keys are stored in Firebase Realtime Database; a tiny page hosted on GitHub Pages resolves them and redirects instantly.",
-      es: "Las claves cortas se guardan en Firebase Realtime Database; una página mínima en GitHub Pages las resuelve y redirige al instante.",
-    },
-    technologies: ["JavaScript", "Firebase", "GitHub Pages"],
-    url: "https://atomic-url.github.io/x/",
-    repo: "https://github.com/atomic-url/x",
-  },
-  {
-    id: "blackboard",
-    title: "Blackboard",
-    kind: "personal",
-    category: "other",
-    image: "https://images.steamusercontent.com/ugc/17038353526919109330/874125497B4A873FBF799E2BF39AE19CFD6F376F/",
-    layout: "board",
-    colors: ["#34d399", "#fbbf24"],
-    featured: false,
-    type: { en: "Wallpaper Engine · Steam", es: "Wallpaper Engine · Steam" },
-    summary: {
-      en: "Interactive blackboard wallpaper for Wallpaper Engine, published on Steam.",
-      es: "Fondo de pantalla interactivo tipo pizarra para Wallpaper Engine, publicado en Steam.",
-    },
-    challenge: {
-      en: "Turn the desktop into a useful, living space instead of a static image.",
-      es: "Convertir el escritorio en un espacio útil y vivo en lugar de una imagen estática.",
-    },
-    solution: {
-      en: "A web‑based wallpaper to write, draw in color and add images right on the desktop, with tools to select and delete elements. Published on the Steam Workshop.",
-      es: "Un fondo web para escribir, dibujar a color y agregar imágenes directamente en el escritorio, con herramientas para seleccionar y borrar elementos. Publicado en Steam Workshop.",
-    },
-    technologies: ["HTML5 Canvas", "JavaScript", "Wallpaper Engine"],
-    url: "https://steamcommunity.com/sharedfiles/filedetails/?id=3552720352",
-  },
-  {
     id: "jump",
     title: "Jump",
     kind: "personal",
@@ -272,30 +298,6 @@ const PROJECTS = [
     },
     technologies: ["Godot 4", "GDScript"],
     repo: "https://github.com/0trebeh/Jump",
-  },
-  {
-    id: "otrelink",
-    title: "Otrelink",
-    kind: "personal",
-    category: "app",
-    layout: "links",
-    colors: ["#f472b6", "#8b7bff"],
-    featured: true,
-    type: { en: "Web app · Full‑stack", es: "App web · Full‑stack" },
-    summary: {
-      en: "Link‑in‑bio platform (Linktree‑style) with a customizable dashboard and analytics.",
-      es: "Plataforma de enlaces tipo Linktree con panel personalizable y analíticas.",
-    },
-    challenge: {
-      en: "Give creators and businesses one page for all their links, with full control over the design and real insight into clicks.",
-      es: "Dar a creadores y negocios una sola página para todos sus enlaces, con control total del diseño y datos reales de clics.",
-    },
-    solution: {
-      en: "A REST API with Node.js, Express and MongoDB (JWT auth, rate limiting, Helmet), models for pages, blocks, styles and analytics, and an installable PWA link page.",
-      es: "Una API REST con Node.js, Express y MongoDB (autenticación JWT, rate limiting, Helmet), modelos para páginas, bloques, estilos y analíticas, y una página de enlaces instalable como PWA.",
-    },
-    technologies: ["Node.js", "Express", "MongoDB", "JWT", "PWA"],
-    repo: "https://github.com/0trebeh/otrelink",
   },
 ]
 
