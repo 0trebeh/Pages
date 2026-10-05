@@ -104,6 +104,31 @@ const PROJECTS = [
     url: "https://steamcommunity.com/sharedfiles/filedetails/?id=3552720352",
   },
   {
+    id: "rose",
+    title: "Rose Multi Services Group",
+    kind: "client",
+    category: "client",
+    image: "img/projects/rose.jpg",
+    layout: "site",
+    colors: ["#1e73be", "#7cc242"],
+    featured: true,
+    type: { en: "WordPress · Cleaning services", es: "WordPress · Servicios de limpieza" },
+    summary: {
+      en: "Bilingual WordPress site for a residential and commercial cleaning company in Orlando, FL.",
+      es: "Sitio bilingüe en WordPress para una empresa de limpieza residencial y comercial en Orlando, FL.",
+    },
+    challenge: {
+      en: "A growing Orlando cleaning company needed a professional online presence to reach both English‑ and Spanish‑speaking customers, show its full range of services and turn visitors into quote requests.",
+      es: "Una empresa de limpieza en crecimiento en Orlando necesitaba una presencia en línea profesional para llegar a clientes de habla inglesa e hispana, mostrar todos sus servicios y convertir visitas en solicitudes de cotización.",
+    },
+    solution: {
+      en: "A bilingual (EN/ES) WordPress site built with Elementor and a customized child theme: hero slider, a page for each service (residential, commercial, windows, carpets, move‑in/move‑out, after renovation…), a 3‑step “how it works” flow, a filterable project gallery and quote forms with Contact Form 7. Deployed and hosted on Hostinger with the client's own domain.",
+      es: "Un sitio bilingüe (EN/ES) en WordPress hecho con Elementor y un tema hijo personalizado: slider de portada, una página por servicio (residencial, comercial, ventanas, alfombras, mudanzas, post‑remodelación…), sección “cómo funciona” en 3 pasos, galería de proyectos con filtros y formularios de cotización con Contact Form 7. Desplegado y alojado en Hostinger con el dominio propio del cliente.",
+    },
+    technologies: ["WordPress", "Elementor", "Child theme", "Contact Form 7", "Hostinger"],
+    url: "https://rosemultiservicesgroup.com/",
+  },
+  {
     id: "forex-chart",
     title: "Forex Chart",
     kind: "personal",
@@ -160,7 +185,7 @@ const PROJECTS = [
     image: "img/projects/vymg.jpg",
     layout: "site",
     colors: ["#22d3ee", "#f472b6"],
-    featured: true,
+    featured: false,
     type: { en: "Website · Events", es: "Sitio web · Eventos" },
     summary: {
       en: "Website for a kids' party and event rentals business.",
