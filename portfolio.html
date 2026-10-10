@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="meta.pfTitle">Portfolio — OtreDev</title>
   <meta name="description" content="Projects by OtreDev: websites, web apps, tools and games.">
-  <meta name="theme-color" content="#0a0b10">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b7bff'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#121212">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23121212'/%3E%3Crect x='10' y='10' width='12' height='12' fill='none' stroke='%23CACCFD' stroke-width='2.5'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,15 +17,36 @@
   <header class="nav" id="nav">
     <div class="container nav__inner">
       <a href="index.html" class="brand" aria-label="OtreDev">
-        <span class="brand__mark" aria-hidden="true">O</span>
-        <span class="brand__name">Otre<span>Dev</span></span>
+        <span class="brand__mark" aria-hidden="true"></span>otredev
       </a>
       <nav class="nav__menu" id="navMenu" aria-label="Main">
-        <a href="index.html#servicios" class="nav__link" data-i18n="nav.services">Services</a>
+        <div class="dropdown" id="servicesMenu">
+          <button type="button" class="nav__link" aria-expanded="false" aria-controls="servicesPanel">
+            <span data-i18n="nav.services">Services</span>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown__panel" id="servicesPanel">
+            <a href="index.html#servicios" class="dropdown__item">
+              <strong><i></i><span data-i18n="prod.1.t">Websites</span></strong>
+              <span data-i18n="prod.1.short">Fast sites and landing pages that turn visitors into customers.</span>
+            </a>
+            <a href="index.html#servicios" class="dropdown__item">
+              <strong><i></i><span data-i18n="prod.2.t">Web &amp; mobile apps</span></strong>
+              <span data-i18n="prod.2.short">Dashboards, SaaS and apps for iOS and Android.</span>
+            </a>
+            <a href="index.html#servicios" class="dropdown__item">
+              <strong><i></i><span data-i18n="prod.3.t">Automation &amp; AI</span></strong>
+              <span data-i18n="prod.3.short">Assistants and workflows that remove repetitive work.</span>
+            </a>
+          </div>
+        </div>
+        <a href="portfolio.html" class="nav__link is-active" data-i18n="nav.projects">Work</a>
         <a href="index.html#proceso" class="nav__link" data-i18n="nav.process">Process</a>
-        <a href="portfolio.html" class="nav__link is-active" data-i18n="nav.projects">Projects</a>
         <a href="index.html#fundador" class="nav__link" data-i18n="nav.about">About</a>
-        <a href="index.html#contacto" class="btn btn--primary btn--sm nav__cta" data-i18n="nav.cta">Let's talk</a>
+        <button type="button" class="btn btn--primary btn--sm nav__cta" data-ask>
+          <span data-i18n="nav.cta">Get in touch</span>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
       </nav>
       <div class="nav__right">
         <div class="lang" role="group" aria-label="Language / Idioma">
@@ -41,15 +62,13 @@
 
   <main>
     <section class="page-hero">
-      <div class="hero__glow" aria-hidden="true"></div>
       <div class="container">
         <a href="index.html" class="back-link">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
           <span data-i18n="pf.back">Back to home</span>
         </a>
-        <span class="kicker" data-i18n="pf.kicker">Portfolio</span>
-        <h1 class="page-hero__title" data-i18n-html="pf.title">Projects that turn ideas into <span class="grad">results</span></h1>
-        <p class="section__lead" data-i18n="pf.lead">A selection of websites, apps, tools and games I've designed and developed — for clients and as personal projects.</p>
+        <h1 class="h1" data-i18n="pf.title">Projects that turn ideas into results.</h1>
+        <p class="lead" data-i18n="pf.lead">A selection of websites, apps, tools and games I've designed and developed — for clients and as personal projects.</p>
 
         <div class="filters" role="group" aria-label="Filter">
           <button class="filter is-active" data-filter="all" aria-pressed="true"><span data-i18n="filter.all">All</span> <em class="filter__n" data-count="all"></em></button>
@@ -62,32 +81,38 @@
 
     <section class="section section--tight">
       <div class="container">
-        <div class="projects projects--grid" id="projectsGrid">
+        <div class="projects" id="projectsGrid">
           <!-- Se genera desde script.js (PROJECTS) -->
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="cta-section">
+      <canvas data-field="cta" aria-hidden="true"></canvas>
       <div class="container">
         <div class="cta-band reveal">
           <div>
             <h2 data-i18n="pf.ctaTitle">Want to see your project here?</h2>
             <p data-i18n="pf.ctaText">Tell us your idea and we'll get back to you within 24 hours with next steps.</p>
           </div>
-          <a href="index.html#contacto" class="btn btn--light">
-            <span data-i18n="pf.ctaBtn">Start a project</span>
+          <button type="button" class="btn btn--primary" data-ask>
+            <span data-i18n="nav.cta">Get in touch</span>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
+          </button>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer__bottom">
-      <p>© <span id="year">2026</span> OtreDev. <span data-i18n="footer.rights">All rights reserved.</span></p>
-      <p><a href="index.html" data-i18n="footer.home">Home</a> · <a href="index.html#contacto" data-i18n="footer.contact">Contact</a></p>
+  <footer class="footer footer--slim">
+    <div class="container">
+      <div class="footer__bottom">
+        <p>© <span id="year">2026</span> OtreDev. <span data-i18n="footer.rights">All rights reserved.</span></p>
+        <nav>
+          <a href="index.html" data-i18n="footer.home">Home</a>
+          <a href="index.html#contacto" data-i18n="footer.contact">Contact</a>
+        </nav>
+      </div>
     </div>
   </footer>
 

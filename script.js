@@ -10,7 +10,7 @@
    --------------------------------------------------------- */
 const CONFIG = {
   whatsapp: "16892434927", // solo números, con código de país
-  linkedin: "", // ej: "https://www.linkedin.com/in/tu-usuario"
+  linkedin: "https://www.linkedin.com/in/heberto-urribarri-2223601a8/",
   github: "https://github.com/0trebeh",
   defaultLang: "en", // idioma predeterminado: "en" o "es"
 }
@@ -60,7 +60,7 @@ const PROJECTS = [
     category: "app",
     layout: "shortener",
     colors: ["#8b7bff", "#22d3ee"],
-    featured: true,
+    featured: false,
     type: { en: "Web app · Link shortener", es: "App web · Acortador de enlaces" },
     summary: {
       en: "Serverless link shortener: short URLs with zero backend and zero cost.",
@@ -86,7 +86,7 @@ const PROJECTS = [
     image: "https://images.steamusercontent.com/ugc/17038353526919109330/874125497B4A873FBF799E2BF39AE19CFD6F376F/",
     layout: "board",
     colors: ["#34d399", "#fbbf24"],
-    featured: true,
+    featured: false,
     type: { en: "Wallpaper Engine · Steam", es: "Wallpaper Engine · Steam" },
     summary: {
       en: "Interactive blackboard wallpaper for Wallpaper Engine, published on Steam.",
@@ -211,7 +211,7 @@ const PROJECTS = [
     image: "img/projects/dozen.jpg",
     layout: "site",
     colors: ["#22c55e", "#8b7bff"],
-    featured: false,
+    featured: true,
     type: { en: "Website · Finance", es: "Sitio web · Finanzas" },
     summary: {
       en: "Bilingual website for a credit‑repair and financial intelligence firm.",
@@ -236,7 +236,7 @@ const PROJECTS = [
     category: "app",
     layout: "sudoku",
     colors: ["#fbbf24", "#8b7bff"],
-    featured: false,
+    featured: true,
     type: { en: "Web app · Publishing", es: "App web · Publicación" },
     summary: {
       en: "Puzzle Book Studio: a web editor to create, lay out and export sudoku books ready for Amazon KDP.",
@@ -372,6 +372,7 @@ function applyLang(next) {
   renderProjects()
   const modal = $("#projectModal")
   if (modal && !modal.hidden && modal.dataset.id) fillModal(modal.dataset.id)
+  if (typeof ask !== "undefined" && ask.open) renderAsk(false)
 }
 
 /* ---------------------------------------------------------
@@ -435,6 +436,37 @@ function projectCard(p) {
     </article>`
 }
 
+/* Tarjeta tipo "paper" (solo texto) para la página de inicio */
+function paperCard(p) {
+  return `
+    <article class="paper reveal">
+      <button class="paper__open" data-project="${p.id}" aria-label="${p.title}">
+        <span class="paper__meta">
+          <span class="paper__kind paper__kind--${p.kind}">${t("proj." + p.kind)}</span>
+          <span>${tx(p.type)}</span>
+        </span>
+        <h3>${p.title}</h3>
+        <p>${tx(p.summary)}</p>
+        <span class="paper__more">${t("proj.more")} ${ARROW}</span>
+      </button>
+    </article>`
+}
+
+/* Tarjeta de la galería circular (inicio) */
+function galleryCard(p) {
+  return `
+    <div class="cg__card">
+      <button type="button" data-project="${p.id}" aria-label="${p.title}">
+        <div class="cg__media">${thumb(p)}</div>
+        <div class="cg__info">
+          <span class="cg__kind cg__kind--${p.kind}">${t("proj." + p.kind)} · ${tx(p.type)}</span>
+          <h3>${p.title}</h3>
+          <p>${tx(p.summary)}</p>
+        </div>
+      </button>
+    </div>`
+}
+
 /* ---------------------------------------------------------
    5. Render de proyectos y filtros
    --------------------------------------------------------- */
@@ -443,8 +475,10 @@ let currentFilter = "all"
 function renderProjects() {
   const featured = $("#featuredProjects")
   if (featured) {
-    featured.innerHTML = PROJECTS.filter((p) => p.featured).map(projectCard).join("")
-    observeReveal(featured)
+    // Primero los destacados, luego el resto: así la galería abre con lo mejor
+    const ordered = [...PROJECTS.filter((p) => p.featured), ...PROJECTS.filter((p) => !p.featured)]
+    featured.innerHTML = ordered.map(galleryCard).join("")
+    layoutGallery()
   }
   const grid = $("#projectsGrid")
   if (grid) {
@@ -500,7 +534,7 @@ function fillModal(id) {
       <div class="modal__actions">
         ${p.url ? `<a href="${p.url}" class="btn btn--ghost" target="_blank" rel="noopener">${t("modal.live")} ${EXT}</a>` : ""}
         ${p.repo ? `<a href="${p.repo}" class="btn btn--ghost" target="_blank" rel="noopener">${t("modal.code")} ${EXT}</a>` : ""}
-        <a href="index.html#contacto" class="btn btn--primary">${t("modal.want")} ${ARROW}</a>
+        <button type="button" class="btn btn--primary" data-ask>${t("modal.want")} ${ARROW}</button>
       </div>
     </div>`
 }
@@ -563,46 +597,621 @@ function setupContactLinks() {
   })
 }
 
-function setupForm() {
-  const form = $("#contactForm")
-  if (!form) return
-  const status = $("#formStatus")
+/* ---------------------------------------------------------
+   7b. Formulario de contacto (un solo modal)
+   Nombre, email, qué necesita y mensaje en una sola pantalla.
+   Al enviar abre WhatsApp con el mensaje listo.
+   --------------------------------------------------------- */
+const ASK_SERVICES = ["web", "app", "ai", "other"]
+const ask = { open: false, done: false, data: { name: "", email: "", service: "", msg: "" }, errors: {}, lastFocus: null }
 
-  form.addEventListener("submit", (e) => {
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c])
+}
+
+const CLOSE_ICON = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>'
+
+function buildAsk() {
+  if ($("#ask")) return
+  const el = document.createElement("div")
+  el.className = "ask"
+  el.id = "ask"
+  el.hidden = true
+  el.setAttribute("role", "dialog")
+  el.setAttribute("aria-modal", "true")
+  el.setAttribute("aria-labelledby", "askTitle")
+  el.innerHTML = `<div class="ask__backdrop" data-ask-close></div><div class="ask__panel"></div>`
+  document.body.appendChild(el)
+
+  el.addEventListener("click", (e) => {
+    if (e.target.closest("[data-ask-close]")) return closeAsk()
+    const chip = e.target.closest("[data-choice]")
+    if (chip) {
+      ask.data.service = chip.dataset.choice
+      delete ask.errors.service
+      $$("[data-choice]", el).forEach((c) => {
+        const on = c === chip
+        c.classList.toggle("is-selected", on)
+        c.setAttribute("aria-checked", on)
+      })
+      const err = $('[data-error="service"]', el)
+      if (err) err.textContent = ""
+    }
+  })
+  el.addEventListener("input", (e) => {
+    const f = e.target.closest("[data-field]")
+    if (!f) return
+    ask.data[f.dataset.field] = f.value
+    delete ask.errors[f.dataset.field]
+    f.classList.remove("has-error")
+    const err = $(`[data-error="${f.dataset.field}"]`, el)
+    if (err) err.textContent = ""
+  })
+  el.addEventListener("submit", (e) => {
     e.preventDefault()
-    let valid = true
-    $$("input[required], textarea[required]", form).forEach((field) => {
-      const ok = field.type === "email" ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim()) : field.value.trim() !== ""
-      field.closest(".field").classList.toggle("has-error", !ok)
-      if (!ok) valid = false
-    })
-    if (!valid) {
-      status.textContent = t("form.err")
-      status.className = "form__status is-error"
-      return
+    sendAsk()
+  })
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") return closeAsk()
+    // Ctrl/Cmd + Enter envía desde el mensaje
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey) && e.target.tagName === "TEXTAREA") {
+      e.preventDefault()
+      sendAsk()
+    }
+    // Mantener el foco dentro del modal
+    if (e.key === "Tab") {
+      const f = $$("button, input, textarea", el).filter((x) => x.offsetParent && !x.disabled)
+      if (!f.length) return
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus() }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus() }
+    }
+  })
+}
+
+function renderAsk(focus) {
+  const el = $("#ask")
+  if (!el) return
+  const panel = $(".ask__panel", el)
+  const d = ask.data
+  const err = (k) => (ask.errors[k] ? t(ask.errors[k]) : "")
+  const close = `<button type="button" class="ask__close" data-ask-close aria-label="${t("ask.close")}">${CLOSE_ICON}</button>`
+
+  if (ask.done) {
+    panel.innerHTML = `
+      ${close}
+      <div class="ask__done">
+        <span class="ask__ok" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <h2 class="ask__title" id="askTitle">${t("ask.done.q")}</h2>
+        <p class="ask__sub">${t("ask.done.s")}</p>
+        <button type="button" class="btn btn--primary" data-ask-close>${t("ask.finish")}</button>
+      </div>`
+    if (focus !== false) requestAnimationFrame(() => $(".ask__done .btn", el).focus())
+    return
+  }
+
+  panel.innerHTML = `
+    ${close}
+    <form class="ask__form" novalidate>
+      <header class="ask__head">
+        <h2 class="ask__title" id="askTitle">${t("ask.title")}</h2>
+        <p class="ask__sub">${t("ask.sub")}</p>
+      </header>
+      <div class="ask__row">
+        <label class="ask__field">
+          <span>${t("ask.f.name")}</span>
+          <input class="ask__input${err("name") ? " has-error" : ""}" data-field="name" type="text" autocomplete="name" placeholder="${t("ask.name.ph")}" value="${escapeHtml(d.name)}">
+          <em class="ask__error" data-error="name">${err("name")}</em>
+        </label>
+        <label class="ask__field">
+          <span>${t("ask.f.email")}</span>
+          <input class="ask__input${err("email") ? " has-error" : ""}" data-field="email" type="email" inputmode="email" autocomplete="email" placeholder="${t("ask.email.ph")}" value="${escapeHtml(d.email)}">
+          <em class="ask__error" data-error="email">${err("email")}</em>
+        </label>
+      </div>
+      <div class="ask__field">
+        <span id="askNeed">${t("ask.f.service")}</span>
+        <div class="ask__chips" role="radiogroup" aria-labelledby="askNeed">
+          ${ASK_SERVICES.map(
+            (s) => `<button type="button" class="ask__chip${d.service === s ? " is-selected" : ""}" data-choice="${s}" role="radio" aria-checked="${d.service === s}">${t("ask.opt." + s)}</button>`,
+          ).join("")}
+        </div>
+        <em class="ask__error" data-error="service">${err("service")}</em>
+      </div>
+      <label class="ask__field">
+        <span>${t("ask.f.msg")}</span>
+        <textarea class="ask__input${err("msg") ? " has-error" : ""}" data-field="msg" rows="4" placeholder="${t("ask.msg.ph")}">${escapeHtml(d.msg)}</textarea>
+        <em class="ask__error" data-error="msg">${err("msg")}</em>
+      </label>
+      <footer class="ask__foot">
+        <span class="ask__hint">${t("ask.review.s")}</span>
+        <button type="submit" class="btn btn--primary">${t("ask.send")} ${ARROW}</button>
+      </footer>
+    </form>`
+  if (focus !== false) requestAnimationFrame(() => $(".ask__input", el).focus())
+}
+
+function sendAsk() {
+  const d = ask.data
+  const e = {}
+  if (!d.name.trim()) e.name = "ask.err.required"
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim())) e.email = "ask.err.email"
+  if (!d.service) e.service = "ask.err.choice"
+  if (!d.msg.trim()) e.msg = "ask.err.required"
+  ask.errors = e
+  if (Object.keys(e).length) {
+    renderAsk(false)
+    const first = $("#ask .has-error") || $("#ask .ask__chip")
+    if (first) first.focus()
+    return
+  }
+  const text = [
+    t("wa.hello"),
+    "",
+    `*${t("wa.name")}:* ${d.name.trim()}`,
+    `*${t("wa.email")}:* ${d.email.trim()}`,
+    `*${t("wa.subject")}:* ${t("ask.opt." + d.service)}`,
+    "",
+    `*${t("wa.msg")}:*`,
+    d.msg.trim(),
+  ].join("\n")
+  window.open(waLink(text), "_blank", "noopener")
+  ask.done = true
+  renderAsk()
+}
+
+function openAsk(service) {
+  buildAsk()
+  closeProject()
+  const el = $("#ask")
+  ask.lastFocus = document.activeElement
+  if (ask.done) {
+    ask.done = false
+    ask.data = { name: "", email: "", service: "", msg: "" }
+  }
+  ask.errors = {}
+  if (service && ASK_SERVICES.includes(service)) ask.data.service = service
+  ask.open = true
+  el.hidden = false
+  document.body.style.overflow = "hidden"
+  renderAsk()
+  requestAnimationFrame(() => el.classList.add("is-open"))
+}
+
+function closeAsk() {
+  const el = $("#ask")
+  if (!el || el.hidden) return
+  ask.open = false
+  el.classList.remove("is-open")
+  document.body.style.overflow = ""
+  setTimeout(() => (el.hidden = true), 300)
+  if (ask.lastFocus) ask.lastFocus.focus()
+}
+
+function setupAsk() {
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest("[data-ask]")
+    if (!trigger) return
+    e.preventDefault()
+    const nav = $("#nav")
+    if (nav) nav.classList.remove("is-open")
+    openAsk(trigger.dataset.ask)
+  })
+  if (location.hash === "#contacto" && !$("#contacto")) openAsk()
+}
+
+/* ---------------------------------------------------------
+   7c. Fondos generativos (hero y franja de declaración)
+   Líneas finas que se desplazan muy despacio.
+   --------------------------------------------------------- */
+/* Sigue el puntero sobre el contenedor del canvas (coordenadas en px CSS del canvas).
+   k va de 0 a 1: presencia del mouse, para que el efecto entre y salga suave. */
+function pointerFor(cv) {
+  const m = { x: 0, y: 0, tx: 0, ty: 0, k: 0, tk: 0 }
+  const host = cv.parentElement || cv
+  host.addEventListener("pointermove", (e) => {
+    const r = cv.getBoundingClientRect()
+    m.tx = e.clientX - r.left
+    m.ty = e.clientY - r.top
+    if (m.tk === 0) { m.x = m.tx; m.y = m.ty }
+    m.tk = 1
+  }, { passive: true })
+  host.addEventListener("pointerleave", () => (m.tk = 0))
+  m.step = () => {
+    m.x += (m.tx - m.x) * 0.14
+    m.y += (m.ty - m.y) * 0.14
+    m.k += (m.tk - m.k) * 0.06
+  }
+  return m
+}
+
+/* ---------------------------------------------------------
+   7c-1. Shaders WebGL con efecto prisma (sin librerías)
+   - "rings": anillos concéntricos separados en RGB (hero y franja)
+   - "wave":  onda con aberración cromática (cta-band)
+   --------------------------------------------------------- */
+const SHADERS = {
+  rings: `precision highp float;
+    uniform vec2 resolution; uniform float time; uniform vec3 bg; uniform float intensity; uniform float spread;
+    void main() {
+      vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
+      float t = time * 0.05;
+      float lineWidth = 0.002;
+      vec3 color = vec3(0.0);
+      for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < 5; i++) {
+          color[j] += lineWidth * float(i * i) / abs(fract(t - 0.01 * float(j) + float(i) * 0.01) * spread - length(uv) + mod(uv.x + uv.y, 0.2));
+        }
+      }
+      gl_FragColor = vec4(bg + color * intensity, 1.0);
+    }`,
+  wave: `precision highp float;
+    uniform vec2 resolution; uniform float time; uniform vec3 bg; uniform float intensity; uniform float glow;
+    uniform vec2 mouse; uniform float mk;
+    void main() {
+      vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+      // cerca del mouse: la onda se curva hacia él y el prisma se abre
+      float pull = mk * exp(-pow((p.x - mouse.x) * 1.3, 2.0));
+      float d = length(p) * 0.05 + pull * 0.35;
+      float rx = p.x * (1.0 + d);
+      float gx = p.x;
+      float bx = p.x * (1.0 - d);
+      float yr = sin((rx + time) * 1.0) * 0.5;
+      float yg = sin((gx + time) * 1.0) * 0.5;
+      float yb = sin((bx + time) * 1.0) * 0.5;
+      float r = glow * (1.0 + pull * 0.6) / abs(p.y + mix(yr, -mouse.y, pull));
+      float g = glow * (1.0 + pull * 0.6) / abs(p.y + mix(yg, -mouse.y, pull));
+      float b = glow * (1.0 + pull * 0.6) / abs(p.y + mix(yb, -mouse.y, pull));
+      gl_FragColor = vec4(bg + vec3(r, g, b) * intensity, 1.0);
+    }`,
+}
+// canvas → shader, color de fondo, intensidad y velocidad (segundos → time)
+const SHADER_FOR = {
+  cta: { src: "wave", bg: [0.047, 0.047, 0.051], intensity: 1.35, speed: 0.6, glow: 0.075 },
+}
+
+function startShader(cv) {
+  const cfg = SHADER_FOR[cv.dataset.field]
+  if (!cfg) return false
+  let gl
+  try { gl = cv.getContext("webgl", { antialias: false, alpha: false, preserveDrawingBuffer: false }) } catch (e) {}
+  if (!gl) return false
+
+  const compile = (type, src) => {
+    const sh = gl.createShader(type)
+    gl.shaderSource(sh, src)
+    gl.compileShader(sh)
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) { console.warn(gl.getShaderInfoLog(sh)); return null }
+    return sh
+  }
+  const vs = compile(gl.VERTEX_SHADER, "attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }")
+  const fs = compile(gl.FRAGMENT_SHADER, SHADERS[cfg.src])
+  if (!vs || !fs) return false
+  const prog = gl.createProgram()
+  gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog)
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false
+  gl.useProgram(prog)
+
+  const buf = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf)
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW)
+  const loc = gl.getAttribLocation(prog, "p")
+  gl.enableVertexAttribArray(loc)
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
+
+  const uRes = gl.getUniformLocation(prog, "resolution")
+  const uTime = gl.getUniformLocation(prog, "time")
+  gl.uniform3fv(gl.getUniformLocation(prog, "bg"), cfg.bg)
+  gl.uniform1f(gl.getUniformLocation(prog, "intensity"), cfg.intensity)
+  const uSpread = gl.getUniformLocation(prog, "spread")
+  if (uSpread) gl.uniform1f(uSpread, cfg.spread || 5.0)
+  const uGlow = gl.getUniformLocation(prog, "glow")
+  if (uGlow) gl.uniform1f(uGlow, cfg.glow || 0.05)
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  const t0 = performance.now() - Math.random() * 4000
+  let raf = 0, visible = true
+
+  const resize = () => {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+    const r = cv.getBoundingClientRect()
+    cv.width = Math.max(1, Math.round(r.width * dpr))
+    cv.height = Math.max(1, Math.round(r.height * dpr))
+    gl.viewport(0, 0, cv.width, cv.height)
+    gl.uniform2f(uRes, cv.width, cv.height)
+  }
+  const uMouse = gl.getUniformLocation(prog, "mouse")
+  const uMk = gl.getUniformLocation(prog, "mk")
+  // La onda de la cta-band (portafolio) no reacciona al mouse: activar con mouse: true en SHADER_FOR
+  const ptr = cfg.mouse ? pointerFor(cv) : null
+  if (uMk) gl.uniform1f(uMk, 0)
+  const draw = (now) => {
+    if (uMouse && ptr) {
+      ptr.step()
+      const W = cv.width, H = cv.height, dpr = W / Math.max(1, cv.clientWidth), mn = Math.min(W, H)
+      gl.uniform2f(uMouse, (ptr.x * dpr * 2 - W) / mn, ((H - ptr.y * dpr) * 2 - H) / mn)
+      gl.uniform1f(uMk, ptr.k)
+    }
+    gl.uniform1f(uTime, ((now - t0) / 1000) * cfg.speed)
+    gl.drawArrays(gl.TRIANGLES, 0, 6)
+  }
+  const loop = (now) => {
+    draw(now)
+    if (visible && !reduce) raf = requestAnimationFrame(loop)
+  }
+
+  resize()
+  draw(performance.now())
+  window.addEventListener("resize", () => { resize(); draw(performance.now()) })
+  if (reduce) return true
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([en]) => {
+      visible = en.isIntersecting
+      cancelAnimationFrame(raf)
+      if (visible) raf = requestAnimationFrame(loop)
+    }).observe(cv)
+  } else raf = requestAnimationFrame(loop)
+  return true
+}
+
+/* Barra fina de progreso de lectura con el degradado prisma */
+function setupProgress() {
+  const bar = document.createElement("div")
+  bar.className = "prism-progress"
+  bar.setAttribute("aria-hidden", "true")
+  document.body.appendChild(bar)
+  const update = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight
+    bar.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`
+  }
+  update()
+  window.addEventListener("scroll", update, { passive: true })
+  window.addEventListener("resize", update)
+}
+
+function setupFields() {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  $$("canvas[data-field]").forEach((cv) => {
+    if (startShader(cv)) return // WebGL disponible: usar el shader
+    if (cv.dataset.field === "cta") return
+    const ctx = cv.getContext("2d")
+    const kind = cv.dataset.field
+    let w = 0, h = 0, dpr = 1, raf = 0, visible = true
+
+    const resize = () => {
+      const r = cv.getBoundingClientRect()
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+      w = r.width; h = r.height
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
-    const d = Object.fromEntries(new FormData(form))
-    const text = [
-      t("wa.hello"),
-      "",
-      `*${t("wa.name")}:* ${d.nombre.trim()}`,
-      `*${t("wa.email")}:* ${d.email.trim()}`,
-      `*${t("wa.subject")}:* ${d.asunto.trim()}`,
-      "",
-      `*${t("wa.msg")}:*`,
-      d.mensaje.trim(),
-    ].join("\n")
+    // Ruido suave hecho con senos (sin dependencias)
+    const n = (x, y, t) =>
+      Math.sin(x * 1.7 + t * 0.6) * 0.5 +
+      Math.sin(y * 2.3 - t * 0.4 + x * 0.8) * 0.3 +
+      Math.sin((x + y) * 3.1 + t * 0.9) * 0.2
 
-    window.open(waLink(text), "_blank", "noopener")
-    status.textContent = t("form.ok")
-    status.className = "form__status is-ok"
-    form.reset()
+    // Prisma: cada línea se dibuja 3 veces (rojo, amarillo, azul) con mezcla aditiva.
+    // Donde los canales coinciden se ve blanco; donde se separan, aparece el arcoíris.
+    const PRISM = [
+      { c: "255,107,107", o: -1 },
+      { c: "254,202,87", o: 0 },
+      { c: "72,219,251", o: 1 },
+    ]
+
+    // "boost": 0 cuando el canvas entra a la pantalla, 1 cuando está centrado.
+    // El efecto se expande (más relieve, más dispersión y más brillo) al acercarse al centro.
+    const boostOf = () => {
+      const r = cv.getBoundingClientRect()
+      const vh = window.innerHeight || 1
+      const center = r.top + r.height / 2
+      const k = 1 - Math.min(1, Math.abs(center - vh / 2) / (vh * 0.75))
+      return k * k * (3 - 2 * k) // suavizado
+    }
+    let boost = 0
+    const ptr = pointerFor(cv)
+    // Lente del mouse: separa las líneas alrededor del cursor y abre el prisma
+    const lens = (x, y) => {
+      if (ptr.k < 0.01) return { push: 0, f: 0 }
+      const dx = x - ptr.x, dy = y - ptr.y
+      const f = ptr.k * Math.exp(-(dx * dx) / 45000 - (dy * dy) / 16000)
+      return { push: (dy / (Math.abs(dy) + 18)) * f * 46, f }
+    }
+
+    const drawHero = (t) => {
+      ptr.step()
+      boost += (boostOf() - boost) * 0.08
+      ctx.globalCompositeOperation = "source-over"
+      ctx.clearRect(0, 0, w, h)
+      ctx.globalCompositeOperation = "lighter"
+      const rows = Math.max(30, Math.round(h / 12))
+      const step = 9
+      const amp = 1 + boost * 1.6 // el relieve crece al centrarse
+      const ridge = (u, v) => {
+        const env = Math.pow(Math.sin(Math.PI * u), 1.8)
+        const wave = 0.6 + n(u * 3, v * 2, t) + 0.35 * Math.sin(u * 9 - t * 2.2 + v * 4) * boost
+        return { env, d: env * (30 + v * 80) * wave * amp }
+      }
+      const accentRow = Math.round(rows * 0.58)
+      for (let r = 0; r < rows; r++) {
+        const v = r / (rows - 1)
+        const baseY = h * 0.1 + v * h * 0.82
+        const near = Math.abs(r - accentRow)
+        const accent = near === 0
+        const halo = Math.max(0, 1 - near / 4) // las líneas vecinas también brillan
+        const alpha = accent ? 0.95 : Math.min(0.85, (0.06 + v * 0.16) * (1 + boost * 0.9) + halo * 0.35 * boost)
+        for (const ch of PRISM) {
+          ctx.beginPath()
+          for (let x = 0; x <= w; x += step) {
+            const u = x / w
+            const { env, d } = ridge(u, v)
+            // dispersión dramática: crece con la curvatura, late y se abre con el boost
+            const y0 = baseY - d
+            const L = lens(x, y0)
+            const spread = ((accent ? 9 : 5 + halo * 6) * (0.2 + env) * (1 + 0.7 * Math.sin(t * 1.6 + u * 6 + v * 3)) * (0.6 + boost * 1.6)) + L.f * 14
+            const y = y0 + L.push + ch.o * spread
+            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+          }
+          if (accent) {
+            ctx.strokeStyle = `rgba(${ch.c},${0.08 + boost * 0.06})`
+            ctx.lineWidth = 10 + boost * 8
+            ctx.stroke()
+            ctx.strokeStyle = `rgba(${ch.c},0.18)`
+            ctx.lineWidth = 4
+            ctx.stroke()
+          }
+          ctx.strokeStyle = `rgba(${ch.c},${alpha})`
+          ctx.lineWidth = accent ? 2 : 1
+          ctx.stroke()
+        }
+      }
+      // Marcador puntual en coral
+      ctx.globalCompositeOperation = "source-over"
+      const mx = w * (0.5 + 0.22 * Math.sin(t * 0.25)) * (1 - ptr.k) + ptr.x * ptr.k // el marcador sigue al mouse
+      const u = mx / w, v = accentRow / (rows - 1)
+      const my = h * 0.1 + v * h * 0.82 - ridge(u, v).d
+      ctx.fillStyle = "rgba(248,101,103,0.25)"
+      ctx.fillRect(mx - 8, my - 8, 16, 16)
+      ctx.fillStyle = "#F86567"
+      ctx.fillRect(mx - 3.5, my - 3.5, 7, 7)
+      ctx.strokeStyle = "rgba(255,255,255,0.18)"
+      ctx.beginPath(); ctx.moveTo(mx, my + 10); ctx.lineTo(mx, h - 44); ctx.stroke()
+    }
+
+    const drawContour = (t) => {
+      ptr.step()
+      boost += (boostOf() - boost) * 0.08
+      ctx.globalCompositeOperation = "source-over"
+      ctx.clearRect(0, 0, w, h)
+      ctx.globalCompositeOperation = "lighter"
+      const cx = w / 2, cy = h / 2
+      const rings = 26
+      // los anillos se expanden hacia fuera al centrarse la sección
+      const maxR = Math.hypot(w, h) * (0.42 + 0.22 * boost)
+      for (let i = 1; i <= rings; i++) {
+        const q = i / rings
+        const base = q * maxR
+        const accent = i === 9 || i === 15
+        const alpha = accent ? 0.75 : Math.min(0.6, (0.05 + q * 0.1) * (1 + boost * 1.2))
+        const wob = 0.13 + 0.12 * boost
+        // los anillos exteriores se dispersan más, como la luz al salir de un prisma
+        const disp = (0.01 + 0.05 * q) * (1 + 0.6 * Math.sin(t * 1.3 + i * 0.6)) * (0.6 + boost * 1.4)
+        for (const ch of PRISM) {
+          ctx.beginPath()
+          for (let a = 0; a <= Math.PI * 2 + 0.01; a += 0.06) {
+            const k = n(Math.cos(a) * 1.2, Math.sin(a) * 1.2 + i * 0.08, t * 0.7)
+            const r = base * (1 + wob * k) * (1 + ch.o * disp)
+            let x = cx + Math.cos(a) * r * 1.6
+            let y = cy + Math.sin(a) * r * 0.75
+            if (ptr.k > 0.01) {
+              // el mouse empuja los anillos hacia fuera y separa los colores
+              const dx = x - ptr.x, dy = y - ptr.y, dd = Math.hypot(dx, dy) + 1
+              const f = ptr.k * Math.exp(-(dd * dd) / 90000)
+              const push = f * (80 + ch.o * 26)
+              x += (dx / dd) * push
+              y += (dy / dd) * push
+            }
+            a === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+          }
+          ctx.closePath()
+          if (accent) {
+            ctx.strokeStyle = `rgba(${ch.c},${0.07 + boost * 0.06})`
+            ctx.lineWidth = 9 + boost * 8
+            ctx.stroke()
+          }
+          ctx.strokeStyle = `rgba(${ch.c},${alpha})`
+          ctx.lineWidth = accent ? 1.6 : 1
+          ctx.stroke()
+        }
+      }
+      ctx.globalCompositeOperation = "source-over"
+    }
+
+    const draw = kind === "contour" ? drawContour : drawHero
+    const loop = (ms) => {
+      draw(ms / 1000 * 0.35)
+      if (!reduce && visible) raf = requestAnimationFrame(loop)
+    }
+
+    resize()
+    draw(0)
+    window.addEventListener("resize", () => { resize(); draw(performance.now() / 1000 * 0.35) })
+    if (reduce) return
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([en]) => {
+        visible = en.isIntersecting
+        cancelAnimationFrame(raf)
+        if (visible) raf = requestAnimationFrame(loop)
+      }).observe(cv)
+    } else raf = requestAnimationFrame(loop)
   })
+}
 
-  $$("input, textarea", form).forEach((f) =>
-    f.addEventListener("input", () => f.closest(".field").classList.remove("has-error")),
-  )
+/* ---------------------------------------------------------
+   7d. Galería circular: tarjetas en un anillo 3D que gira
+   con el scroll (sección fija) y con un giro lento automático.
+   --------------------------------------------------------- */
+const gallery = { radius: 0, step: 0, auto: 0, rot: 0, running: false }
+
+function layoutGallery() {
+  const ring = $("#featuredProjects")
+  if (!ring || !ring.classList.contains("cg__ring")) return
+  const cards = $$(".cg__card", ring)
+  const n = cards.length || 1
+  const cw = ring.offsetWidth || 300
+  gallery.step = 360 / n
+  gallery.radius = Math.round(Math.max(cw * 1.2, (n * (cw + 36)) / (2 * Math.PI)))
+  cards.forEach((c, i) => {
+    c.dataset.angle = i * gallery.step
+    c.style.transform = `rotateY(${i * gallery.step}deg) translateZ(${gallery.radius}px)`
+  })
+  paintGallery()
+}
+
+function paintGallery() {
+  const ring = $("#featuredProjects")
+  if (!ring) return
+  ring.style.transform = `translateZ(${-gallery.radius}px) rotateY(${gallery.rot}deg)`
+  $$(".cg__card", ring).forEach((c) => {
+    const a = ((+c.dataset.angle + gallery.rot) * Math.PI) / 180
+    const facing = (Math.cos(a) + 1) / 2 // 1 = de frente, 0 = de espaldas
+    c.style.opacity = (0.12 + 0.88 * Math.pow(facing, 1.6)).toFixed(3)
+    c.style.pointerEvents = facing > 0.75 ? "auto" : "none"
+    c.firstElementChild.tabIndex = facing > 0.75 ? 0 : -1
+  })
+}
+
+function setupGallery() {
+  const g = $("#workGallery")
+  if (!g) return
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  let last = performance.now()
+  let lastScroll = window.scrollY
+  let idleSince = performance.now()
+  let raf = 0
+
+  const tick = (now) => {
+    const dt = Math.min(now - last, 64)
+    last = now
+    const range = g.offsetHeight - window.innerHeight
+    const top = g.getBoundingClientRect().top
+    const progress = range > 0 ? Math.min(1, Math.max(0, -top / range)) : 0
+    if (window.scrollY !== lastScroll) { lastScroll = window.scrollY; idleSince = now }
+    // Giro automático suave cuando el usuario no está desplazándose
+    if (!reduce && now - idleSince > 600) gallery.auto += dt * 0.006
+    const target = -progress * 360 - gallery.auto
+    gallery.rot += (target - gallery.rot) * 0.12 // suavizado
+    paintGallery()
+    if (gallery.running) raf = requestAnimationFrame(tick)
+  }
+
+  const start = () => { if (gallery.running) return; gallery.running = true; last = performance.now(); raf = requestAnimationFrame(tick) }
+  const stop = () => { gallery.running = false; cancelAnimationFrame(raf) }
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([en]) => (en.isIntersecting ? start() : stop())).observe(g)
+  } else start()
+  window.addEventListener("resize", layoutGallery)
 }
 
 /* ---------------------------------------------------------
@@ -630,6 +1239,24 @@ function setupNav() {
   )
 
   $$(".lang__btn").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)))
+
+  // Menú desplegable de servicios: hover en escritorio, clic en todos
+  const dd = $("#servicesMenu")
+  if (dd) {
+    const btn = $("button", dd)
+    const set = (open) => {
+      dd.classList.toggle("is-open", open)
+      btn.setAttribute("aria-expanded", open)
+    }
+    const hoverable = window.matchMedia("(hover: hover) and (min-width: 901px)")
+    let timer
+    dd.addEventListener("mouseenter", () => { if (hoverable.matches) { clearTimeout(timer); set(true) } })
+    dd.addEventListener("mouseleave", () => { if (hoverable.matches) timer = setTimeout(() => set(false), 120) })
+    btn.addEventListener("click", () => set(!dd.classList.contains("is-open")))
+    $$("a", dd).forEach((a) => a.addEventListener("click", () => set(false)))
+    document.addEventListener("click", (e) => { if (!dd.contains(e.target)) set(false) })
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") set(false) })
+  }
 
   // Resaltar sección activa
   const links = $$('.nav__link[href^="#"]')
@@ -677,10 +1304,13 @@ function observeReveal(root = document) {
 document.addEventListener("DOMContentLoaded", () => {
   setupFilters()
   setupContactLinks()
-  setupForm()
+  setupAsk()
   setupNav()
   applyLang(loadLang()) // también dibuja los proyectos
   setupModal()
+  setupFields()
+  setupGallery()
+  setupProgress()
   observeReveal()
   const y = $("#year")
   if (y) y.textContent = new Date().getFullYear()

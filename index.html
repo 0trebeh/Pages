@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="meta.title">OtreDev — Agile software development with AI</title>
   <meta name="description" data-i18n-content="meta.desc" content="OtreDev designs and builds websites, apps and automations for startups, small businesses and companies. Agile development powered by AI.">
-  <meta name="theme-color" content="#0a0b10">
+  <meta name="theme-color" content="#121212">
   <meta property="og:title" content="OtreDev — Agile software development with AI">
   <meta property="og:description" content="Websites, apps and automations built for your business, delivered in weeks.">
   <meta property="og:type" content="website">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b7bff'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23121212'/%3E%3Crect x='10' y='10' width='12' height='12' fill='none' stroke='%23CACCFD' stroke-width='2.5'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,17 +21,37 @@
   <header class="nav" id="nav">
     <div class="container nav__inner">
       <a href="#inicio" class="brand" aria-label="OtreDev">
-        <span class="brand__mark" aria-hidden="true">O</span>
-        <span class="brand__name">Otre<span>Dev</span></span>
+        <span class="brand__mark" aria-hidden="true"></span>otredev
       </a>
 
       <nav class="nav__menu" id="navMenu" aria-label="Main">
-        <a href="#servicios" class="nav__link" data-i18n="nav.services">Services</a>
+        <div class="dropdown" id="servicesMenu">
+          <button type="button" class="nav__link" aria-expanded="false" aria-controls="servicesPanel">
+            <span data-i18n="nav.services">Services</span>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown__panel" id="servicesPanel">
+            <a href="#servicios" class="dropdown__item">
+              <strong><i></i><span data-i18n="prod.1.t">Websites</span></strong>
+              <span data-i18n="prod.1.short">Fast sites and landing pages that turn visitors into customers.</span>
+            </a>
+            <a href="#servicios" class="dropdown__item">
+              <strong><i></i><span data-i18n="prod.2.t">Web &amp; mobile apps</span></strong>
+              <span data-i18n="prod.2.short">Dashboards, SaaS and apps for iOS and Android.</span>
+            </a>
+            <a href="#servicios" class="dropdown__item">
+              <strong><i></i><span data-i18n="prod.3.t">Automation &amp; AI</span></strong>
+              <span data-i18n="prod.3.short">Assistants and workflows that remove repetitive work.</span>
+            </a>
+          </div>
+        </div>
+        <a href="#proyectos" class="nav__link" data-i18n="nav.projects">Work</a>
         <a href="#proceso" class="nav__link" data-i18n="nav.process">Process</a>
-        <a href="#proyectos" class="nav__link" data-i18n="nav.projects">Projects</a>
         <a href="#fundador" class="nav__link" data-i18n="nav.about">About</a>
-        <a href="#faq" class="nav__link" data-i18n="nav.faq">FAQ</a>
-        <a href="#contacto" class="btn btn--primary btn--sm nav__cta" data-i18n="nav.cta">Let's talk</a>
+        <button type="button" class="btn btn--primary btn--sm nav__cta" data-ask>
+          <span data-i18n="nav.cta">Get in touch</span>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
       </nav>
 
       <div class="nav__right">
@@ -49,163 +69,181 @@
   <main>
     <!-- ============ HERO ============ -->
     <section class="hero" id="inicio">
-      <div class="hero__glow" aria-hidden="true"></div>
-      <div class="hero__grid" aria-hidden="true"></div>
-
-      <div class="container hero__inner">
+      <div class="container">
         <div class="hero__copy">
-          <span class="eyebrow reveal"><span class="dot"></span> <span data-i18n="hero.eyebrow">Software studio · powered by AI</span></span>
-          <h1 class="hero__title reveal" data-i18n-html="hero.title">
-            Software built for your business, <span class="grad">in weeks, not months.</span>
-          </h1>
-          <p class="hero__lead reveal" data-i18n="hero.lead">
-            At OtreDev we design and build websites, apps and automations for startups, small businesses and companies. We use artificial intelligence to speed up every stage without cutting corners on quality.
-          </p>
+          <span class="label reveal" data-i18n="hero.eyebrow">Software studio · powered by AI</span>
+          <h1 class="h1 reveal" data-i18n="hero.title">Software for your business, accelerated by AI.</h1>
+          <p class="lead reveal" data-i18n="hero.lead">We design and build websites, apps and automations for startups, small businesses and companies — using AI to move faster, never to cut corners.</p>
           <div class="hero__actions reveal">
-            <a href="#contacto" class="btn btn--primary">
-              <span data-i18n="hero.cta1">Start your project</span>
+            <button type="button" class="btn btn--primary" data-ask>
+              <span data-i18n="nav.cta">Get in touch</span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <a href="#proyectos" class="link-arrow">
+              <span data-i18n="hero.cta2">See our work</span>
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
-            <a href="#proyectos" class="btn btn--ghost" data-i18n="hero.cta2">See projects</a>
           </div>
-          <ul class="hero__trust reveal">
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> <span data-i18n="hero.t1">Visual prototype in days</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> <span data-i18n="hero.t2">Clear proposal and pricing</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> <span data-i18n="hero.t3">Support after launch</span></li>
-          </ul>
         </div>
 
-        <!-- Visual del hero: ventana de producto -->
         <div class="hero__visual reveal" aria-hidden="true">
-          <div class="window">
-            <div class="window__bar">
-              <span></span><span></span><span></span>
-              <div class="window__url" data-i18n="hero.url">your-business.com/dashboard</div>
-            </div>
-            <div class="window__body">
-              <aside class="w-side">
-                <i class="w-logo"></i>
-                <i></i><i class="on"></i><i></i><i></i>
-              </aside>
-              <div class="w-main">
-                <div class="w-head"><b></b><em></em></div>
-                <div class="w-kpis">
-                  <div class="w-kpi"><small data-i18n="hero.k1">Sales</small><strong>$48.2k</strong><span class="up">+12%</span></div>
-                  <div class="w-kpi"><small data-i18n="hero.k2">Customers</small><strong>1,284</strong><span class="up">+8%</span></div>
-                  <div class="w-kpi"><small data-i18n="hero.k3">Orders</small><strong>362</strong><span class="up">+21%</span></div>
-                </div>
-                <div class="w-chart">
-                  <svg viewBox="0 0 300 110" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#8b7bff" stop-opacity=".45"/>
-                        <stop offset="1" stop-color="#8b7bff" stop-opacity="0"/>
-                      </linearGradient>
-                    </defs>
-                    <path d="M0 90 C30 80 45 84 70 70 S115 40 140 52 S190 30 215 34 S265 12 300 8 L300 110 L0 110Z" fill="url(#area)"/>
-                    <path d="M0 90 C30 80 45 84 70 70 S115 40 140 52 S190 30 215 34 S265 12 300 8" fill="none" stroke="#a79bff" stroke-width="2.5"/>
-                  </svg>
-                </div>
-                <div class="w-rows"><i></i><i></i><i></i></div>
-              </div>
-            </div>
+          <canvas data-field="hero"></canvas>
+          <div class="hero__meta">
+            <span><b>01</b> &nbsp;<span data-i18n="hero.m1">Discovery → Prototype → Launch</span></span>
+            <span data-i18n="hero.m2">Visual prototype in days · Clear pricing · Support after launch</span>
           </div>
+        </div>
 
-          <div class="float float--a">
-            <span class="float__icon ok"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
-            <div><strong data-i18n="hero.f1t">Prototype approved</strong><small data-i18n="hero.f1s">Iteration 2 of 3</small></div>
-          </div>
-          <div class="float float--b">
-            <span class="float__icon ai"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></span>
-            <div><strong data-i18n="hero.f2t">AI‑assisted development</strong><small data-i18n="hero.f2s">Faster, same rigor</small></div>
-          </div>
+        <div class="stack reveal">
+          <span data-i18n="stack.label">Built with</span>
+          <span>TypeScript</span><span>React</span><span>Next.js</span><span>Node.js</span><span>ASP.NET Core</span><span>Python</span><span>SQL Server</span><span>PostgreSQL</span><span>Power Automate</span><span>n8n</span><span>Odoo</span>
         </div>
       </div>
     </section>
 
-    <!-- ============ STACK ============ -->
-    <section class="stack" aria-label="Stack">
-      <div class="container">
-        <p class="stack__label" data-i18n="stack.label">Technologies we build with</p>
-      </div>
-      <div class="marquee">
-        <div class="marquee__track">
-          <span>React</span><span>TypeScript</span><span>Node.js</span><span>Next.js</span><span>MongoDB</span>
-          <span>Firebase</span><span>Vite</span><span>Godot</span><span>Python</span><span>OpenAI</span>
-          <span>React</span><span>TypeScript</span><span>Node.js</span><span>Next.js</span><span>MongoDB</span>
-          <span>Firebase</span><span>Vite</span><span>Godot</span><span>Python</span><span>OpenAI</span>
-          <span>React</span><span>TypeScript</span><span>Node.js</span><span>Next.js</span><span>MongoDB</span>
-          <span>Firebase</span><span>Vite</span><span>Godot</span><span>Python</span><span>OpenAI</span>
-          <span>React</span><span>TypeScript</span><span>Node.js</span><span>Next.js</span><span>MongoDB</span>
-          <span>Firebase</span><span>Vite</span><span>Godot</span><span>Python</span><span>OpenAI</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ SERVICIOS ============ -->
+    <!-- ============ SERVICIOS (productos) ============ -->
     <section class="section" id="servicios">
       <div class="container">
         <header class="section__head reveal">
-          <span class="kicker" data-i18n="svc.kicker">Services</span>
-          <h2 class="section__title" data-i18n="svc.title">Everything your business needs to grow online</h2>
-          <p class="section__lead" data-i18n="svc.lead">From your first website to the platform that runs your operation. One team, from idea to launch.</p>
+          <h2 class="h2" data-i18n="svc.title">What we build</h2>
+          <p class="lead" data-i18n="svc.lead">Three lines of work, one team — from your first website to the platform that runs your operation.</p>
         </header>
 
-        <div class="services">
-          <article class="service reveal">
-            <div class="service__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg></div>
-            <h3 data-i18n="svc.1.t">Websites &amp; landing pages</h3>
-            <p data-i18n="svc.1.p">A professional presence that turns visitors into customers.</p>
-            <ul class="checks">
-              <li data-i18n="svc.1.l1">Fast, responsive design</li>
-              <li data-i18n="svc.1.l2">Technical SEO and analytics</li>
-              <li data-i18n="svc.1.l3">Forms and WhatsApp built in</li>
-            </ul>
+        <div class="products">
+          <article class="product reveal">
+            <div class="product__visual" aria-hidden="true">
+              <svg class="viz" viewBox="0 0 320 240">
+                <rect x="20" y="24" width="280" height="192"/>
+                <path d="M20 46h280"/>
+                <circle cx="34" cy="35" r="2.5" style="fill:rgba(255,255,255,.3);stroke:none"/><circle cx="44" cy="35" r="2.5" style="fill:rgba(255,255,255,.3);stroke:none"/><circle cx="54" cy="35" r="2.5" style="fill:rgba(255,255,255,.3);stroke:none"/>
+                <path d="M40 64h28M200 64h20M228 64h20M256 64h24"/>
+                <rect x="40" y="92" width="118" height="10" class="fill" style="fill:rgba(255,255,255,.55)"/>
+                <rect x="40" y="108" width="92" height="10" class="fill" style="fill:rgba(255,255,255,.55)"/>
+                <path d="M40 132h110M40 142h86"/>
+                <rect x="40" y="160" width="54" height="18" rx="3" class="hi-fill"/>
+                <rect x="180" y="84" width="100" height="104" class="fill"/>
+                <rect x="180" y="84" width="100" height="104"/>
+                <path d="M180 188 214 146l20 22 16-14 30 34" class="hi"/>
+                <circle cx="256" cy="108" r="8" class="lav"/>
+              </svg>
+            </div>
+            <div class="product__body">
+              <h3 data-i18n="prod.1.t">Websites</h3>
+              <p data-i18n="prod.1.p">A professional presence that turns visitors into customers.</p>
+              <ul class="product__list">
+                <li data-i18n="svc.1.l1">Fast, responsive design</li>
+                <li data-i18n="svc.1.l2">Technical SEO and analytics</li>
+                <li data-i18n="svc.1.l3">Forms and WhatsApp built in</li>
+              </ul>
+              <button type="button" class="link-arrow" data-ask="web"><span data-i18n="prod.cta">Start a project</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
           </article>
 
-          <article class="service reveal">
-            <div class="service__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
-            <h3 data-i18n="svc.2.t">Web apps &amp; dashboards</h3>
-            <p data-i18n="svc.2.p">Internal tools, SaaS and dashboards to run your business with data.</p>
-            <ul class="checks">
-              <li data-i18n="svc.2.l1">Users, roles and permissions</li>
-              <li data-i18n="svc.2.l2">Real‑time reports and metrics</li>
-              <li data-i18n="svc.2.l3">Architecture ready to scale</li>
-            </ul>
+          <article class="product reveal">
+            <div class="product__visual" aria-hidden="true">
+              <svg class="viz" viewBox="0 0 320 240">
+                <rect x="20" y="30" width="220" height="170"/>
+                <path d="M56 30v170"/>
+                <path d="M32 50h12M32 64h12M32 78h12"/>
+                <rect x="70" y="44" width="48" height="26" class="fill"/><rect x="126" y="44" width="48" height="26" class="fill"/><rect x="182" y="44" width="46" height="26" class="fill"/>
+                <path d="M70 160 C90 150 100 154 118 136 S150 120 168 124 S205 96 228 92" class="hi"/>
+                <path d="M70 178h158" />
+                <path d="M78 178v-10M98 178v-16M118 178v-8M138 178v-20M158 178v-12M178 178v-24M198 178v-14M218 178v-30" style="stroke:rgba(255,255,255,.18)"/>
+                <rect x="232" y="78" width="70" height="132" rx="10" style="fill:#191919"/>
+                <rect x="232" y="78" width="70" height="132" rx="10" class="lav"/>
+                <path d="M258 88h18"/>
+                <rect x="244" y="104" width="46" height="30" class="fill"/>
+                <path d="M244 146h46M244 158h34M244 170h40"/>
+                <rect x="244" y="184" width="46" height="12" rx="2" class="hi-fill"/>
+              </svg>
+            </div>
+            <div class="product__body">
+              <h3 data-i18n="prod.2.t">Web &amp; mobile apps</h3>
+              <p data-i18n="prod.2.p">Internal tools, SaaS, dashboards and iOS/Android apps from a single codebase.</p>
+              <ul class="product__list">
+                <li data-i18n="svc.2.l1">Users, roles and permissions</li>
+                <li data-i18n="svc.2.l2">Real‑time reports and metrics</li>
+                <li data-i18n="svc.3.l1">Payments and push notifications</li>
+              </ul>
+              <button type="button" class="link-arrow" data-ask="app"><span data-i18n="prod.cta">Start a project</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
           </article>
 
-          <article class="service reveal">
-            <div class="service__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></div>
-            <h3 data-i18n="svc.3.t">Mobile apps</h3>
-            <p data-i18n="svc.3.p">iOS and Android apps from a single codebase.</p>
-            <ul class="checks">
-              <li data-i18n="svc.3.l1">Payments and push notifications</li>
-              <li data-i18n="svc.3.l2">Sync with your systems</li>
-              <li data-i18n="svc.3.l3">App store publishing</li>
-            </ul>
+          <article class="product reveal">
+            <div class="product__visual" aria-hidden="true">
+              <svg class="viz" viewBox="0 0 320 240">
+                <path d="M60 60 160 120M60 120h100M60 180l100-60M160 120l100-60M160 120h100M160 120l100 60" style="stroke:rgba(255,255,255,.16)"/>
+                <path d="M60 120h100M160 120l100-60" class="hi"/>
+                <rect x="40" y="48" width="40" height="24" style="fill:#191919"/><rect x="40" y="48" width="40" height="24"/>
+                <rect x="40" y="108" width="40" height="24" style="fill:#191919"/><rect x="40" y="108" width="40" height="24" class="hi"/>
+                <rect x="40" y="168" width="40" height="24" style="fill:#191919"/><rect x="40" y="168" width="40" height="24"/>
+                <circle cx="160" cy="120" r="26" style="fill:#191919"/>
+                <circle cx="160" cy="120" r="26" class="lav"/>
+                <circle cx="160" cy="120" r="14" class="hi"/>
+                <circle cx="160" cy="120" r="4" class="hi-fill"/>
+                <rect x="240" y="48" width="40" height="24" style="fill:#191919"/><rect x="240" y="48" width="40" height="24" class="hi"/>
+                <rect x="240" y="108" width="40" height="24" style="fill:#191919"/><rect x="240" y="108" width="40" height="24"/>
+                <rect x="240" y="168" width="40" height="24" style="fill:#191919"/><rect x="240" y="168" width="40" height="24"/>
+                <circle cx="280" cy="48" r="4" class="coral"/>
+                <path d="M50 60h20M50 120h20M50 180h20M250 60h20M250 120h20M250 180h20" style="stroke:rgba(255,255,255,.4)"/>
+              </svg>
+            </div>
+            <div class="product__body">
+              <h3 data-i18n="prod.3.t">Automation &amp; AI</h3>
+              <p data-i18n="prod.3.p">Save hours of repetitive work with AI applied to your processes.</p>
+              <ul class="product__list">
+                <li data-i18n="svc.4.l1">Assistants and chatbots</li>
+                <li data-i18n="svc.4.l2">Workflows and app integrations</li>
+                <li data-i18n="svc.4.l3">Consulting to adopt AI</li>
+              </ul>
+              <button type="button" class="link-arrow" data-ask="ai"><span data-i18n="prod.cta">Start a project</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
           </article>
+        </div>
+      </div>
+    </section>
 
-          <article class="service reveal">
-            <div class="service__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4z"/><path d="M19 17l.9 2.1L22 20l-2.1.9L19 23l-.9-2.1L16 20l2.1-.9z"/></svg></div>
-            <h3 data-i18n="svc.4.t">Automation &amp; AI</h3>
-            <p data-i18n="svc.4.p">Save hours of repetitive work with AI applied to your processes.</p>
-            <ul class="checks">
-              <li data-i18n="svc.4.l1">Assistants and chatbots</li>
-              <li data-i18n="svc.4.l2">Workflows and app integrations</li>
-              <li data-i18n="svc.4.l3">Consulting to adopt AI</li>
-            </ul>
-          </article>
+    <!-- ============ DECLARACIÓN ============ -->
+    <section class="statement" id="ventajas" aria-label="OtreDev">
+      <canvas data-field="contour" aria-hidden="true"></canvas>
+      <p class="statement__text reveal" data-i18n-html="why.statement">The speed of AI, <span>with the judgment of a developer.</span></p>
+    </section>
+
+    <!-- ============ TRABAJO (research) ============ -->
+    <section class="section" id="proyectos">
+      <div class="container">
+        <header class="section__head section__head--row reveal">
+          <div>
+            <h2 class="h2" data-i18n="proj.title">Recent work</h2>
+            <p class="lead" data-i18n="proj.lead">Products we've shipped for clients and built in‑house — each one a small study in doing more with less.</p>
+          </div>
+          <a href="portfolio.html" class="link-arrow"><span data-i18n="proj.all">View all work</span>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </header>
+
+      </div>
+
+      <!-- Galería circular: gira con el scroll (se genera desde script.js con todos los PROJECTS) -->
+      <div class="cg" id="workGallery">
+        <div class="cg__sticky">
+          <div class="cg__stage">
+            <div class="cg__ring" id="featuredProjects"></div>
+          </div>
+          <p class="cg__hint">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+            <span data-i18n="proj.hint">Scroll to rotate the gallery</span>
+          </p>
         </div>
       </div>
     </section>
 
     <!-- ============ PROCESO ============ -->
-    <section class="section section--alt" id="proceso">
+    <section class="section" id="proceso">
       <div class="container">
         <header class="section__head reveal">
-          <span class="kicker" data-i18n="proc.kicker">How we work</span>
-          <h2 class="section__title" data-i18n="proc.title">A clear process, no surprises</h2>
-          <p class="section__lead" data-i18n="proc.lead">You see real progress from the first week and take part in every important decision.</p>
+          <h2 class="h2" data-i18n="proc.title">A clear process, no surprises</h2>
+          <p class="lead" data-i18n="proc.lead">You see real progress from the first week and take part in every important decision.</p>
         </header>
 
         <ol class="steps">
@@ -219,73 +257,30 @@
       </div>
     </section>
 
-    <!-- ============ PROYECTOS ============ -->
-    <section class="section" id="proyectos">
-      <div class="container">
-        <header class="section__head section__head--row reveal">
-          <div>
-            <span class="kicker" data-i18n="proj.kicker">Projects</span>
-            <h2 class="section__title" data-i18n="proj.title">Recent work</h2>
-          </div>
-          <a href="portfolio.html" class="link-arrow"><span data-i18n="proj.all">View full portfolio</span>
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </header>
-
-        <div class="projects" id="featuredProjects">
-          <!-- Se genera desde script.js (PROJECTS con featured: true) -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ POR QUÉ ============ -->
-    <section class="section section--alt" id="ventajas">
-      <div class="container why">
-        <div class="why__intro reveal">
-          <span class="kicker" data-i18n="why.kicker">Why OtreDev</span>
-          <h2 class="section__title" data-i18n="why.title">The speed of AI with a developer's judgment</h2>
-          <p class="section__lead" data-i18n="why.lead">AI lets us remove the repetitive work. That frees up time for what matters: understanding your business and building something that truly works.</p>
-          <a href="#contacto" class="btn btn--primary" data-i18n="why.cta">Tell us your idea</a>
-        </div>
-        <div class="why__list">
-          <div class="feature reveal">
-            <div class="feature__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></div>
-            <div><h3 data-i18n="why.1.t">Real speed</h3><p data-i18n="why.1.p">We prototype in hours and deliver in weeks, not months.</p></div>
-          </div>
-          <div class="feature reveal">
-            <div class="feature__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
-            <div><h3 data-i18n="why.2.t">Focused on results</h3><p data-i18n="why.2.p">We don't just ship code: we solve your business's real problem.</p></div>
-          </div>
-          <div class="feature reveal">
-            <div class="feature__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
-            <div><h3 data-i18n="why.3.t">Quality and scalability</h3><p data-i18n="why.3.p">Clean, tested code ready to grow with your company.</p></div>
-          </div>
-          <div class="feature reveal">
-            <div class="feature__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-            <div><h3 data-i18n="why.4.t">Direct communication</h3><p data-i18n="why.4.p">You talk to the person building your project. No middlemen, no lost messages.</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ============ FUNDADOR ============ -->
     <section class="section" id="fundador">
       <div class="container">
-        <div class="founder reveal">
-          <div class="founder__photo">
-            <!-- Para usar tu foto: reemplaza el <span> por <img src="img/foto.jpg" alt="Heberto Urribarri"> -->
+        <div class="founder">
+          <figure class="founder__photo reveal">
             <img src="img/foto.jpg" alt="Heberto Urribarri">
-            <span class="founder__badge" data-i18n="founder.badge">Founder</span>
-          </div>
-          <div class="founder__body">
-            <span class="kicker" data-i18n="founder.kicker">Behind OtreDev</span>
-            <h2 class="founder__name">Heberto Urribarri</h2>
-            <p class="founder__role" data-i18n="founder.role">Founder &amp; full‑stack developer</p>
-            <p data-i18n="founder.p1">I started OtreDev with a simple idea: any business, whatever its size, should be able to have quality software without waiting months or overpaying. I combine experience in web, mobile and backend development with AI tools to work faster and spend the time on what really matters.</p>
+            <figcaption class="founder__caption"><span>Heberto Urribarri</span><span data-i18n="founder.badge">Founder</span></figcaption>
+          </figure>
+          <div class="founder__body reveal">
+            <span class="label" data-i18n="founder.kicker">Behind OtreDev</span>
+            <h2 class="h2">Heberto Urribarri</h2>
+            <p class="founder__role" data-i18n="founder.role">Founder · Computer Engineer</p>
+            <p data-i18n="founder.p1">I started OtreDev with a simple idea: any business, whatever its size, should be able to have quality software without waiting months or overpaying.</p>
             <p data-i18n="founder.p2">When you work with OtreDev, you work directly with me — from the first call to launch day.</p>
+            <ul class="cv">
+              <li><span>2024–25</span><strong data-i18n="cv.1.r">Software Engineer</strong><em data-i18n="cv.1.c">United Data Technologies · USA</em></li>
+              <li><span>2023–24</span><strong data-i18n="cv.2.r">Full Stack Developer</strong><em data-i18n="cv.2.c">Addin Technologies · Colombia (remote)</em></li>
+              <li><span data-i18n="cv.3.y">2020–now</span><strong data-i18n="cv.3.r">Freelance developer</strong><em data-i18n="cv.3.c">Vymg, Cubisystem &amp; private clients</em></li>
+              <li><span>2018–22</span><strong data-i18n="cv.4.r">B.S. Computer Engineering</strong><em>Universidad Rafael Urdaneta</em></li>
+            </ul>
             <div class="founder__tags">
-              <span data-i18n="founder.tag1">Full‑stack</span><span data-i18n="founder.tag2">Web &amp; mobile</span><span data-i18n="founder.tag3">Applied AI</span><span data-i18n="founder.tag4">Game dev</span>
+              <span data-i18n="founder.tag1">Full‑stack</span><span data-i18n="founder.tag2">Automation &amp; ETL</span><span data-i18n="founder.tag3">AI agents</span><span>SQL Server</span><span>Odoo ERP</span><span>Scrum</span>
             </div>
+            <p class="founder__certs" data-i18n="founder.certs">Certified: Cisco Ethical Hacker · IBM SQL &amp; Relational Databases · Python Institute · Scrum Foundation</p>
             <div class="founder__links">
               <a href="#" data-contact="github" class="icon-link" target="_blank" rel="noopener">
                 <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3.1-.4 6.4-1.5 6.4-6.9a5.4 5.4 0 0 0-1.5-3.7 5 5 0 0 0-.1-3.8s-1.2-.4-3.9 1.5a13.4 13.4 0 0 0-7 0C6.3 1.7 5.1 2 5.1 2A5 5 0 0 0 5 5.8a5.4 5.4 0 0 0-1.5 3.7c0 5.4 3.3 6.5 6.4 6.9a3.4 3.4 0 0 0-.9 2.6V22"/></svg>
@@ -306,18 +301,19 @@
     </section>
 
     <!-- ============ FAQ ============ -->
-    <section class="section section--alt" id="faq">
+    <section class="section" id="faq">
       <div class="container faq">
-        <header class="section__head reveal">
-          <span class="kicker" data-i18n="faq.kicker">FAQ</span>
-          <h2 class="section__title" data-i18n="faq.title">What people usually ask us</h2>
+        <header class="reveal">
+          <h2 class="h2" data-i18n="faq.title">What people usually ask us</h2>
         </header>
-        <div class="faq__list">
-          <details class="reveal"><summary data-i18n="faq.1.q">How long does a project take?</summary><p data-i18n="faq.1.a">It depends on the scope.</p></details>
-          <details class="reveal"><summary data-i18n="faq.2.q">How much does it cost?</summary><p data-i18n="faq.2.a">Every project is quoted based on what you need.</p></details>
-          <details class="reveal"><summary data-i18n="faq.3.q">What does it mean that you use AI to build?</summary><p data-i18n="faq.3.a">We use AI tools to prototype faster.</p></details>
-          <details class="reveal"><summary data-i18n="faq.4.q">Do I own the code and the project?</summary><p data-i18n="faq.4.a">Yes.</p></details>
-          <details class="reveal"><summary data-i18n="faq.5.q">Do you offer support after delivery?</summary><p data-i18n="faq.5.a">Yes.</p></details>
+        <div class="faq__list reveal">
+          <details><summary data-i18n="faq.1.q">How long does a project take?</summary><p data-i18n="faq.1.a">It depends on the scope.</p></details>
+          <details><summary data-i18n="faq.2.q">How much does it cost?</summary><p data-i18n="faq.2.a">Every project is quoted based on what you need.</p></details>
+          <details><summary data-i18n="faq.3.q">What does it mean that you use AI to build?</summary><p data-i18n="faq.3.a">We use AI tools to prototype faster.</p></details>
+          <details><summary data-i18n="faq.4.q">Do I own the code and the project?</summary><p data-i18n="faq.4.a">Yes.</p></details>
+          <details><summary data-i18n="faq.6.q">Can you automate a process we do by hand?</summary><p data-i18n="faq.6.a">Yes.</p></details>
+          <details><summary data-i18n="faq.5.q">Do you offer support after delivery?</summary><p data-i18n="faq.5.a">Yes.</p></details>
+          <details><summary data-i18n="faq.7.q">Do you work in English and Spanish?</summary><p data-i18n="faq.7.a">Yes.</p></details>
         </div>
       </div>
     </section>
@@ -326,52 +322,28 @@
     <section class="section" id="contacto">
       <div class="container">
         <div class="contact reveal">
-          <div class="contact__info">
-            <span class="kicker" data-i18n="contact.kicker">Contact</span>
-            <h2 class="section__title" data-i18n="contact.title">Have an idea? Let's make it happen.</h2>
-            <p class="section__lead" data-i18n="contact.lead">Tell us what you need and we'll reply within 24 hours with next steps. The first consultation is free.</p>
-            <div class="contact__channels">
-              <a href="#" data-contact="whatsapp" class="channel" target="_blank" rel="noopener">
-                <span class="channel__icon channel__icon--wa"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21l1.7-5A8.5 8.5 0 1 1 8 19.3z"/></svg></span>
-                <span><strong>WhatsApp</strong><small data-contact-text="whatsapp">+1 (689) 243‑4927</small></span>
-              </a>
-              <a href="#" data-contact="github" class="channel" target="_blank" rel="noopener">
-                <span class="channel__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3.1-.4 6.4-1.5 6.4-6.9a5.4 5.4 0 0 0-1.5-3.7 5 5 0 0 0-.1-3.8s-1.2-.4-3.9 1.5a13.4 13.4 0 0 0-7 0C6.3 1.7 5.1 2 5.1 2A5 5 0 0 0 5 5.8a5.4 5.4 0 0 0-1.5 3.7c0 5.4 3.3 6.5 6.4 6.9a3.4 3.4 0 0 0-.9 2.6V22"/></svg></span>
-                <span><strong>GitHub</strong><small data-i18n="contact.gh">See my code</small></span>
-              </a>
-              <a href="#" data-contact="linkedin" class="channel" target="_blank" rel="noopener">
-                <span class="channel__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></span>
-                <span><strong>LinkedIn</strong><small data-i18n="contact.li">Connect with us</small></span>
-              </a>
-            </div>
-          </div>
-
-          <form class="form" id="contactForm" novalidate>
-            <div class="form__row">
-              <label class="field">
-                <span data-i18n="form.name">Name</span>
-                <input type="text" name="nombre" data-i18n-placeholder="form.namePh" placeholder="Your name" required autocomplete="name">
-              </label>
-              <label class="field">
-                <span data-i18n="form.email">Email</span>
-                <input type="email" name="email" data-i18n-placeholder="form.emailPh" placeholder="you@company.com" required autocomplete="email">
-              </label>
-            </div>
-            <label class="field">
-              <span data-i18n="form.subject">Subject</span>
-              <input type="text" name="asunto" data-i18n-placeholder="form.subjectPh" placeholder="e.g. Website for my restaurant" required>
-            </label>
-            <label class="field">
-              <span data-i18n="form.msg">Message</span>
-              <textarea name="mensaje" rows="5" data-i18n-placeholder="form.msgPh" placeholder="Briefly describe your idea, your business and your timeline." required></textarea>
-            </label>
-            <button type="submit" class="btn btn--wa btn--block">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21l1.7-5A8.5 8.5 0 1 1 8 19.3z"/></svg>
-              <span data-i18n="form.send">Send via WhatsApp</span>
+          <div class="contact__copy">
+            <h2 class="h2" data-i18n="contact.title">Have an idea? Let's make it happen.</h2>
+            <p class="lead" data-i18n="contact.lead">Tell us what you need and we'll reply within 24 hours with next steps. The first consultation is free.</p>
+            <button type="button" class="btn btn--primary" data-ask>
+              <span data-i18n="nav.cta">Get in touch</span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </button>
-            <p class="form__note" data-i18n="form.note">Your message opens in WhatsApp, ready to send.</p>
-            <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
-          </form>
+          </div>
+          <div class="channels">
+            <a href="#" data-contact="whatsapp" class="channel" target="_blank" rel="noopener">
+              <span><strong>WhatsApp</strong><small>+1 (689) 243‑4927</small></span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </a>
+            <a href="#" data-contact="github" class="channel" target="_blank" rel="noopener">
+              <span><strong>GitHub</strong><small data-i18n="contact.gh">See my code</small></span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </a>
+            <a href="#" data-contact="linkedin" class="channel" target="_blank" rel="noopener">
+              <span><strong>LinkedIn</strong><small data-i18n="contact.li">Connect with us</small></span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -379,40 +351,54 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <a href="#inicio" class="brand">
-          <span class="brand__mark" aria-hidden="true">O</span>
-          <span class="brand__name">Otre<span>Dev</span></span>
-        </a>
-        <p data-i18n="footer.desc">Agile software development with AI for startups, small businesses and companies.</p>
+    <div class="container">
+      <div class="footer__top">
+        <p class="footer__quote" data-i18n-html="footer.quote">Good software is quiet. <span>It just works for your business.</span></p>
+        <div class="socials">
+          <a href="#" data-contact="github" target="_blank" rel="noopener" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3.1-.4 6.4-1.5 6.4-6.9a5.4 5.4 0 0 0-1.5-3.7 5 5 0 0 0-.1-3.8s-1.2-.4-3.9 1.5a13.4 13.4 0 0 0-7 0C6.3 1.7 5.1 2 5.1 2A5 5 0 0 0 5 5.8a5.4 5.4 0 0 0-1.5 3.7c0 5.4 3.3 6.5 6.4 6.9a3.4 3.4 0 0 0-.9 2.6V22"/></svg></a>
+          <a href="#" data-contact="linkedin" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#" data-contact="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21l1.7-5A8.5 8.5 0 1 1 8 19.3z"/></svg></a>
+        </div>
       </div>
+
       <div class="footer__cols">
-        <div>
-          <h4 data-i18n="footer.company">Company</h4>
-          <a href="#servicios" data-i18n="nav.services">Services</a>
-          <a href="#proceso" data-i18n="nav.process">Process</a>
-          <a href="#fundador" data-i18n="nav.about">About</a>
-          <a href="portfolio.html" data-i18n="footer.portfolio">Portfolio</a>
+        <div class="footer__brand">
+          <a href="#inicio" class="brand"><span class="brand__mark" aria-hidden="true"></span>otredev</a>
+          <p data-i18n="footer.desc">Agile software development with AI for startups, small businesses and companies.</p>
         </div>
         <div>
           <h4 data-i18n="footer.services">Services</h4>
-          <a href="#servicios" data-i18n="footer.s1">Websites</a>
-          <a href="#servicios" data-i18n="footer.s2">Web apps</a>
-          <a href="#servicios" data-i18n="footer.s3">Mobile apps</a>
-          <a href="#servicios" data-i18n="footer.s4">Automation &amp; AI</a>
+          <a href="#servicios" data-i18n="prod.1.t">Websites</a>
+          <a href="#servicios" data-i18n="prod.2.t">Web &amp; mobile apps</a>
+          <a href="#servicios" data-i18n="prod.3.t">Automation &amp; AI</a>
+        </div>
+        <div>
+          <h4 data-i18n="footer.work">Work</h4>
+          <a href="#proyectos" data-i18n="footer.recent">Recent work</a>
+          <a href="portfolio.html" data-i18n="footer.portfolio">Portfolio</a>
+          <a href="#proceso" data-i18n="nav.process">Process</a>
+        </div>
+        <div>
+          <h4 data-i18n="footer.company">Company</h4>
+          <a href="#fundador" data-i18n="nav.about">About</a>
+          <a href="#faq" data-i18n="nav.faq">FAQ</a>
+          <a href="https://github.com/0trebeh" target="_blank" rel="noopener" data-i18n="footer.oss">Open source</a>
         </div>
         <div>
           <h4 data-i18n="footer.contact">Contact</h4>
+          <button type="button" data-ask data-i18n="nav.cta">Get in touch</button>
           <a href="#" data-contact="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
-          <a href="#" data-contact="github" target="_blank" rel="noopener">GitHub</a>
           <a href="#" data-contact="linkedin" target="_blank" rel="noopener">LinkedIn</a>
         </div>
       </div>
-    </div>
-    <div class="container footer__bottom">
-      <p>© <span id="year">2026</span> OtreDev. <span data-i18n="footer.rights">All rights reserved.</span></p>
-      <p data-i18n="footer.made">Created by otrebeh with &lt;3</p>
+
+      <div class="footer__bottom">
+        <p>© <span id="year">2026</span> OtreDev. <span data-i18n="footer.rights">All rights reserved.</span></p>
+        <nav>
+          <span data-i18n="footer.made">Created by otrebeh with &lt;3</span>
+          <a href="#inicio" data-i18n="footer.top">Back to top</a>
+        </nav>
+      </div>
     </div>
   </footer>
 
