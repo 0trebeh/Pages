@@ -994,9 +994,9 @@ function setupFields() {
     // Prisma: cada línea se dibuja 3 veces (rojo, amarillo, azul) con mezcla aditiva.
     // Donde los canales coinciden se ve blanco; donde se separan, aparece el arcoíris.
     const PRISM = [
-      { c: "255,107,107", o: -1 },
-      { c: "254,202,87", o: 0 },
-      { c: "72,219,251", o: 1 },
+      { c: "254,202,87", o: -1 },
+      { c: "47,143,224", o: 0 },
+      { c: "255,107,107", o: 1 },
     ]
 
     // "boost": 0 cuando el canvas entra a la pantalla, 1 cuando está centrado.
@@ -1065,14 +1065,14 @@ function setupFields() {
           ctx.stroke()
         }
       }
-      // Marcador puntual en coral
+      // Marcador puntual en blanco (sigue al mouse)
       ctx.globalCompositeOperation = "source-over"
       const mx = w * (0.5 + 0.22 * Math.sin(t * 0.25)) * (1 - ptr.k) + ptr.x * ptr.k // el marcador sigue al mouse
       const u = mx / w, v = accentRow / (rows - 1)
       const my = h * 0.1 + v * h * 0.82 - ridge(u, v).d
-      ctx.fillStyle = "rgba(248,101,103,0.25)"
+      ctx.fillStyle = "rgba(255,255,255,0.22)"
       ctx.fillRect(mx - 8, my - 8, 16, 16)
-      ctx.fillStyle = "#F86567"
+      ctx.fillStyle = "#ffffff"
       ctx.fillRect(mx - 3.5, my - 3.5, 7, 7)
       ctx.strokeStyle = "rgba(255,255,255,0.18)"
       ctx.beginPath(); ctx.moveTo(mx, my + 10); ctx.lineTo(mx, h - 44); ctx.stroke()
@@ -1258,21 +1258,26 @@ function setupNav() {
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") set(false) })
   }
 
-  // Resaltar sección activa
+  // Resaltar sección activa: solo la que cruza el centro de la pantalla.
+  // Si el centro cae en una zona sin enlace (hero, FAQ, contacto…), no se marca ninguno.
   const links = $$('.nav__link[href^="#"]')
   const sections = links.map((l) => $(l.getAttribute("href"))).filter(Boolean)
-  if (!sections.length || !("IntersectionObserver" in window)) return
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((en) => {
-        if (en.isIntersecting) {
-          links.forEach((l) => l.classList.toggle("is-active", l.getAttribute("href") === `#${en.target.id}`))
-        }
-      })
-    },
-    { rootMargin: "-45% 0px -50% 0px" },
-  )
-  sections.forEach((s) => io.observe(s))
+  if (!sections.length) return
+  let ticking = false
+  const update = () => {
+    ticking = false
+    const mid = window.innerHeight / 2
+    const current = sections.find((sec) => {
+      const r = sec.getBoundingClientRect()
+      return r.top <= mid && r.bottom > mid
+    })
+    links.forEach((l) => l.classList.toggle("is-active", !!current && l.getAttribute("href") === `#${current.id}`))
+  }
+  window.addEventListener("scroll", () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update) }
+  }, { passive: true })
+  window.addEventListener("resize", update)
+  update()
 }
 
 const revealIO =
