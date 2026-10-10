@@ -897,10 +897,12 @@ body {
 @keyframes cgNudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 
 @media (max-width: 640px) {
-  .cg { --cw: 200px; --ch: 280px; height: 240vh; margin-top: -18vh; }
-  .cg__info { padding: 14px; }
-  .cg__info h3 { font-size: 1.0625rem; }
-  .cg__info p { display: none; }
+  .cg { --cw: 68vw; --ch: 92vw; height: 260vh; margin-top: -12vh; }
+  .cg__sticky { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%); }
+  .cg__stage { perspective: 1400px; }
+  .cg__info { padding: 18px; }
+  .cg__info h3 { font-size: 1.1875rem; }
+  .cg__info p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.8125rem; }
 }
 @media (prefers-reduced-motion: reduce) { .cg__hint .icon { animation: none; } }
 

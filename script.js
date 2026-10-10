@@ -1019,6 +1019,9 @@ function setupFields() {
     }
 
     const drawHero = (t) => {
+      // En pantallas estrechas el patrón se calcula sobre un ancho lógico de 900px
+      // y se muestra su parte central, para que las ondas no se compriman.
+      const uOf = (x) => (x - w / 2) / Math.max(w, 900) + 0.5
       ptr.step()
       boost += (boostOf() - boost) * 0.08
       ctx.globalCompositeOperation = "source-over"
@@ -1043,7 +1046,7 @@ function setupFields() {
         for (const ch of PRISM) {
           ctx.beginPath()
           for (let x = 0; x <= w; x += step) {
-            const u = x / w
+            const u = uOf(x)
             const { env, d } = ridge(u, v)
             // dispersión dramática: crece con la curvatura, late y se abre con el boost
             const y0 = baseY - d
@@ -1068,7 +1071,7 @@ function setupFields() {
       // Marcador puntual en blanco (sigue al mouse)
       ctx.globalCompositeOperation = "source-over"
       const mx = w * (0.5 + 0.22 * Math.sin(t * 0.25)) * (1 - ptr.k) + ptr.x * ptr.k // el marcador sigue al mouse
-      const u = mx / w, v = accentRow / (rows - 1)
+      const u = uOf(mx), v = accentRow / (rows - 1)
       const my = h * 0.1 + v * h * 0.82 - ridge(u, v).d
       ctx.fillStyle = "rgba(255,255,255,0.22)"
       ctx.fillRect(mx - 8, my - 8, 16, 16)
@@ -1198,8 +1201,12 @@ function setupGallery() {
     const progress = range > 0 ? Math.min(1, Math.max(0, -top / range)) : 0
     if (window.scrollY !== lastScroll) { lastScroll = window.scrollY; idleSince = now }
     // Giro automático suave cuando el usuario no está desplazándose
-    if (!reduce && now - idleSince > 600) gallery.auto += dt * 0.006
-    const target = -progress * 360 - gallery.auto
+    const mobile = window.matchMedia("(max-width: 640px)").matches
+    const idle = now - idleSince > 600
+    // Escritorio: giro automático lento. Móvil: sin giro y, al soltar, encaja una tarjeta al centro.
+    if (!reduce && idle && !mobile) gallery.auto += dt * 0.006
+    let target = -progress * 360 - gallery.auto
+    if (mobile && idle && gallery.step) target = Math.round(target / gallery.step) * gallery.step
     gallery.rot += (target - gallery.rot) * 0.12 // suavizado
     paintGallery()
     if (gallery.running) raf = requestAnimationFrame(tick)
